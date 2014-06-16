@@ -1,0 +1,24 @@
+<div class="jumbotron text-center">
+	<h1>Nerds and Proud</h1>
+
+	<p>{{ tagline }}</p>
+</div>
+
+
+<button class="btn btn-success" ng-click="linkToNewNerd()">Post </button>
+
+
+<br><br>
+<h2>{{current_header}}</h2>
+<div class="nerds-list" ng-repeat="nerd in allnerds">
+	<u>Nerd #{{$index+1}}</u>
+	<button class="btn-xs btn-info" ng-click="editNerd(nerd)">Edit</button>
+	<button class="btn-xs btn-danger" ng-click="deleteNerd(nerd)">Delete</button><br>
+	<strong>Name:</strong> {{nerd.name}}<br>
+	<strong>Email:</strong> {{nerd.email}}<br>
+	<strong>Science:</strong> {{nerd.science}}<br>
+	--------------------------------------------- <br>
+</div>
+
+
+
