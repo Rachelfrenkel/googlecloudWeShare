@@ -3,12 +3,18 @@ var mongoose = require('mongoose'),
 	Nerd = mongoose.model('Nerd');
 var util = require('util');
 
-// Nerd.load('53a2ef304e9147db6f000001', function(err, nerd) {
-//     console.log('nerd = ' + nerd);
-//     // if (err) return next(err);
-//     // if (!nerd) return next(new Error('Failed to load piece ' + id));
-//     // next();
-// });
+
+/**
+ * Set a 'nerd' object to the request object
+ */
+exports.nerd = function(req, res, next, id) {
+    Nerd.load(id, function(err, nerd) {
+        if (err) return next(err);
+        if (!nerd) return next(new Error('Failed to load nerd ' + id));
+        req.nerd = nerd;
+        next();
+    });
+};
 
 
 /**
@@ -52,31 +58,14 @@ exports.create = function(req, res) {
  * Delete a nerd
  */
 exports.destroy = function(req, res) {
-    var nerd = req.body;
-    Nerd.remove({ _id: req.body._id}, function(err) {
+    // var nerd = req.nerd;
+    // var nerdId = req.nerd._id; //If we want to return a nerd object in our response..
+    var nerdId = req.params.id;
+    Nerd.remove({ _id: nerdId}, function(err) {
         if (err) {
             res.render('error', { status: 500 });
         } else {
-            res.jsonp(nerd);
+            res.send('Nerd was successfully deleted!');
         }
-    });
-};
-
-exports.hi = function(req, res, id) {
-    Nerd.load(id, function(err, nerd) {
-        return nerd;
-    });
-}
-
-/**
- * Find nerd by id
- */
-exports.nerd = function(req, res, next, id) {
-    Nerd.load(id, function(err, nerd) {
-        if (err) return next(err);
-        if (!nerd) return next(new Error('Failed to load nerd ' + id));
-        console.log('nerd = ' + util.inspect(nerd));
-        req.nerd = nerd;
-        next();
     });
 };

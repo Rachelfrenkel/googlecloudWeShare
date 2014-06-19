@@ -2,11 +2,11 @@ angular.module('NerdController', []).controller('NerdController', function($scop
 	$scope.tagline = 'Nothing beats a pocket protector!';
 
 	$scope.getNerds = function(){
-		Nerd.resourceObj.query(function(response) {
-			var nerd3 = response[2];
-			console.log('nerd3 = ' + angular.toJson(nerd3));
-			nerd3.$remove();
-		});
+		// Nerd.resourceObj.query(function(response) {
+		// 	var nerd3 = response[2];
+		// 	console.log('nerd3 = ' + angular.toJson(nerd3));
+		// 	// nerd3.$remove();
+		// });
 		Nerd.get().then(function(response){
 			$scope.allnerds = response.data;
 		});
@@ -25,8 +25,6 @@ angular.module('NerdController', []).controller('NerdController', function($scop
 		// console.log('all nerds are = ' + nerds);
 	});
 
-        // console.log('new nerd = ' + nerd);
-	$scope.helloworld = 'hello world';
 
 	$scope.linkToNewNerd = function(){
 		$location.path('/nerds/create');
@@ -49,15 +47,15 @@ angular.module('NerdController', []).controller('NerdController', function($scop
 	};
 
 	$scope.deleteNerd = function(nerd){
-		// console.log('delete object = ' + angular.toJson(nerd));
-		// nerd.remove();
-		Nerd.destroy(nerd._id);
-		// console.log('nerd = ' + nerd);
-		// console.log('inspect nerd = ' + angular.toJson(nerd));
-  //       nerd.$remove(function(response) {
-  //       	console.log('response = ' + response);
-  //       });
-		// $scope.getNerds();
+		Nerd.destroy(nerd._id).then(function(results){
+			console.log('results = ' + angular.toJson(results));
+			if (results.status == 200) {
+				$scope.getNerds();
+				console.log('delete was successful');
+			} else {
+				console.log('delete failed.');
+			}
+		});
 	};
 
 	$scope.findNerd = function(){
