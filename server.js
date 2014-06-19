@@ -2,6 +2,8 @@
 var express = require('express');
 var app     = express();
 var mongoose= require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 // configuration ===========================================
 	
@@ -18,6 +20,9 @@ app.configure(function() {
 	app.use(express.methodOverride()); 					// simulate DELETE and PUT
 });
 
+// passport ===============================================
+app.use(passport.initialize());
+app.use(passport.session());
 
 // routes ==================================================
 require('./server/routes/nerds')(app); // pass our application into our routes

@@ -1,4 +1,4 @@
-angular.module('NerdService', []).factory('Nerd', ['$http', function($http, $resource) {
+angular.module('NerdService', []).factory('Nerd', ['$http', '$resource', function($http, $resource) {
 
 	return {
 		// call to get all nerds
@@ -12,9 +12,14 @@ angular.module('NerdService', []).factory('Nerd', ['$http', function($http, $res
 		},
 
 		// call to DELETE a nerd
-		delete : function(id) {
+		destroy : function(id) {
 			return $http.delete('/api/nerds/' + id);
-		}
-	}	
+		},
 
+		// create a resource object to interact with RESTful
+		// server-side data sources
+		resourceObj: $resource('api/nerds/:id', {
+			id: '@_id'
+		})
+	}	
 }]);

@@ -10,20 +10,27 @@ module.exports = function(app) {
 	// handle things like api calls
 	// authentication routes
 
+
+
+
 	// sample api route
 	app.get('/api/nerds', function(req, res) {
+		// nerds.hi(req, res, '53a2ef304e9147db6f000001');
+		console.log('GET request');
 		nerds.find(req,res);
 	});
-
+	
 	app.post('/api/nerds', function(req, res){
+		console.log('POST request');
 		nerds.create(req,res);
 	});
 
-	app.delete('api/nerds', function(req,res){
-		nerds.delete(req,res);
+	app.delete('api/nerds/:id', function(req,res){
+		console.log('DELETE request');
+		nerds.destroy(req,res);
 	});
 
-	// route to handle delete (app.delete)
+	// route to handle update (app.put)
 
 	// frontend routes =========================================================
 	// route to handle all angular requests

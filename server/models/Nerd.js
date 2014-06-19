@@ -28,6 +28,13 @@ NerdSchema.path('science').validate(function(science){
 	return science.length;
 }, 'Science cannot be blank');
 
+/**
+ * Statics
+ */
+NerdSchema.statics.load = function(id, cb) {
+    this.findOne({
+        _id: id
+    }).exec(cb);
+};
 
 mongoose.model('Nerd', NerdSchema);
-
