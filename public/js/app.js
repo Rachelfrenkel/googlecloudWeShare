@@ -1,6 +1,7 @@
 angular.module('sampleApp', 
 	['ngRoute', 
 	'ngResource',
+	'ngCookies',
 	'appRoutes', 
 	'HomeController', 
 	'NerdController', 

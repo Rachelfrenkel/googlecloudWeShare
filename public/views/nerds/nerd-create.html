@@ -1,5 +1,6 @@
 <form class="form-horizontal" role="form" data-ng-submit="addNewNerd()">
   <div class="form-group">
+    <input type="hidden" name="_csrf">
     <label for="name" class="col-sm-2 control-label">Name</label>
     <div class="col-sm-10">
       <input type="text" class="form-control" id="name" placeholder="Name" data-ng-model="name">

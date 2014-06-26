@@ -1,13 +1,15 @@
-angular.module('NerdService', []).factory('Nerd', ['$http', '$resource', function($http, $resource) {
+angular.module('NerdService', []).factory('Nerd', ['$http', '$cookies', '$resource', function($http, $cookies, $resource) {
 
 	return {
-		// call to get all nerds
+		// call to GET all nerds
 		get : function() {
 			return $http.get('/api/nerds');
 		},
 
 		// call to POST and create a new nerd
 		create : function(nerdData) {
+			// $http.defaults.headers.post['x-csrf-token'] = $cookies._csrfToken;
+			// console.log('default headers = ' + angular.toJson($http.defaults.headers));
 			return $http.post('/api/nerds', nerdData);
 		},
 

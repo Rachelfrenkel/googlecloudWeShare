@@ -2,31 +2,29 @@ angular.module('NerdController', []).controller('NerdController', function($scop
 	$scope.tagline = 'Nothing beats a pocket protector!';
 
 	$scope.getNerds = function(){
-		// Nerd.resourceObj.query(function(response) {
-		// 	var nerd3 = response[2];
-		// 	console.log('nerd3 = ' + angular.toJson(nerd3));
-		// 	// nerd3.$remove();
-		// });
 		Nerd.get().then(function(response){
+			console.log('resopnse.data = ' + response.data);
 			$scope.allnerds = response.data;
 		});
 	}
 
-    var nerd = new Nerd.resourceObj({
-        name: 'Bob',
-        email : 'bob@gmail.com',
-        science : 'chemistry'
-    });
+	// // Creates a NERD object server-side. We can then save or delete this object as if
+	// // we were operating on the server.
+    // var nerd = new Nerd.resourceObj({
+    //     name: 'Bob',
+    //     email : 'bob@gmail.com',
+    //     science : 'chemistry'
+    // });
 
+	
 
-	// console.log('Nerd.object = ' + angular.toJson(nerd));
-
-	Nerd.resourceObj.query(function(nerds) {
-		// console.log('all nerds are = ' + nerds);
-	});
+	// Nerd.resourceObj.query(function(nerds) {
+	// 	// console.log('all nerds are = ' + nerds);
+	// });
 
 
 	$scope.linkToNewNerd = function(){
+		console.log('link to new nerd');
 		$location.path('/nerds/create');
 	};
 

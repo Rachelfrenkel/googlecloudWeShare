@@ -6,7 +6,7 @@ angular.module('appRoutes', [])
 		// home page
 		.when('/', {
 			templateUrl: 'views/home.html',
-			controller: 'MainController'
+			controller: 'HomeController'
 		})
 
 		//nerds index page

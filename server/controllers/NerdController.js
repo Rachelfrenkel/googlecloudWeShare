@@ -58,6 +58,8 @@ exports.create = function(req, res) {
  * Delete a nerd
  */
 exports.destroy = function(req, res) {
+    console.log('Deleting a nerd...');
+
     // var nerd = req.nerd;
     // var nerdId = req.nerd._id; //If we want to return a nerd object in our response..
     var nerdId = req.params.id;
@@ -68,4 +70,10 @@ exports.destroy = function(req, res) {
             res.send('Nerd was successfully deleted!');
         }
     });
+};
+
+
+exports.update = function(req, res) {
+    res.send('Nerd was successfully updated');
+
 };

@@ -6,6 +6,24 @@
     "morgan": "~1.0.0",
     "body-parser": "~1.0.0",
     "method-override": "~1.0.0",
-    "mongoose": "~3.6.13"
+    "mongoose": "~3.6.13",
+    "csurf": "~1.2.2",
+    "cookie-session": "~1.0.2",
+    "cookie": "~0.1.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "description": "This is a repo for a starter appliation for a Single Page MEAN Stack application. Just download and install and you have a good foundation for building application.",
+  "version": "0.0.0",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlin91/mean-nerds.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/vlin91/mean-nerds/issues"
   }
 }
