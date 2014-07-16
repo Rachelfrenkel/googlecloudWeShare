@@ -8,7 +8,15 @@ var restify = require('restify'),
     multiparty = require('multiparty'),
     Mimer = require('mimer');
 var googleapis = require('googleapis'),
-    OAuth2 = googleapis.auth.OAuth2;;
+    OAuth2 = googleapis.auth.OAuth2;
+var CloudStorage = require('cloud-storage');
+var gcloud = require('gcloud'),
+    bucketCloud = new gcloud.storage.Bucket({
+        projectId: 'effective-balm-635',
+        email: '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8@developer.gserviceaccount.com',
+        pemFilePath: __dirname + "/../../key.pem"
+    });
+
 
   var clientId = '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8.apps.googleusercontent.com';
   var email =    '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8@developer.gserviceaccount.com';
@@ -45,24 +53,39 @@ var url = oauth2Client.generateAuthUrl({
   scope: scopes.join(" ") // space delimited string of scopes
 });
 
+var storage = new CloudStorage({
+    accessId: '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8@developer.gserviceaccount.com',
+    privateKey: __dirname + "/../../key.pem"
+});
+
 exports.getfiles = function(req, res){
+
+    var bucket = 'cindylikeschicken';
+
     console.log("getting files server side");
-    googleapis.discover('storage', 'v1').execute(function(err, client) {
-        if (err) {
-            console.log('problem during client discovery', err);
-            return;
-        }
-        client.storage.buckets.list(
-            {'project': 'effective-balm-365'},
-            {'bucket':'cindylikeschicken'})
-            .withApiKey(apiKey)
-            .withAuthClient(oauth2Client)
-            .execute(function(resp) {
-                console.log("bucket resp: ", resp);
-            });
+    var url = storage.getUrl("gs://cindylikeschicken/hivince");
+    console.log("url: ", url);
 
-
+    bucketCloud.list(function(err, files, nextQuery) {
+        if(err) console.log(err);
+        console.log("files: ", files);
     });
+
+    // googleapis.discover('storage', 'v1').execute(function(err, client) {
+    //     if (err) {
+    //         console.log('problem during client discovery', err);
+    //         return;
+    //     }
+    //     client.storage.buckets.list(
+    //         {'project': 'effective-balm-365'},
+    //         {'bucket':'cindylikeschicken'})
+    //         .withApiKey(apiKey)
+    //         .withAuthClient(oauth2Client)
+    //         .execute(function(resp) {
+    //             console.log("bucket resp: ", resp);
+    //         });
+
+    // });
 }
 
 
@@ -131,28 +154,9 @@ exports.upload = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-    console.log("going to delete");
-    var fileName = req.params.file;
-
-        var gapi = new GAPI({
-            iss: '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8@developer.gserviceaccount.com',
-            scope: 'https://www.googleapis.com/auth/devstorage.full_control',
-            keyFile: __dirname + '/../../key.pem'
-        }, 
-        function(err) {
-            if (err) { console.log('google cloud authorization error: ' + err); }
-
-            var headers = {
-                'Content-Type': Mimer(fileType),
-                'Transfer-Encoding': 'Chunked',
-                'x-goog-acl': 'public-read'
-            };
-
-            var gcs = new GCS(gapi);
-
-            gcs.deleteFile('cindylikeschicken', '/' + fileName, headers, function(gerr, gres){
-                console.log('file should be gone!');
-            });
-        });
+    //var bucket = req.params.bucket
+    storage.remove("gs://cindylikeschicken/hivince", function(err, success) { 
+        console.log(success);
+    });
     res.redirect('/nerds');
 };
