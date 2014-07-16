@@ -1,0 +1,25 @@
+<h1>Register Page</h1>
+<br>
+
+<form class = "form-horizontal" role="form" data-ng-submit="registerUser()">
+	<div class="form-group">
+		<input type="hidden" name="_csrf">
+		<label for="username" class="col-sm-2 control-label">Username: </label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="username" placeholder="Username" data-ng-model="username">
+		</div>
+	</div>
+	<div class="form-group">
+		<input type="hidden" name="_csrf">
+		<label for="password" class="col-sm-2 control-label">Password: </label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="password" placeholder="Password" data-ng-model="password">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-success">Register</button>
+		</div>
+	</div>
+</form>

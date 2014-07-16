@@ -28,7 +28,7 @@ exports.find = function(req, res) {
 
     Nerd.find(nerdQuery, function(err, nerds) {
         if (err) {
-            console.log('we got an error');
+            console.log('we got an error finding a nerd');
             res.render('error', { status: 500 });
         } else {
             res.jsonp(nerds);
@@ -61,6 +61,9 @@ exports.destroy = function(req, res) {
     console.log('Deleting a nerd...');
 
     // var nerd = req.nerd;
+    // nerd.delete();
+
+    // var nerd = req.nerd;
     // var nerdId = req.nerd._id; //If we want to return a nerd object in our response..
     var nerdId = req.params.id;
     Nerd.remove({ _id: nerdId}, function(err) {
@@ -74,6 +77,7 @@ exports.destroy = function(req, res) {
 
 
 exports.update = function(req, res) {
+    var nerdId = req.params.id;
     res.send('Nerd was successfully updated');
 
 };

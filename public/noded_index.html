@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<base href="/">
+
+	<title>Starter Node and Angular</title>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css"> <!-- custom styles -->
+
+	<!-- JS -->
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="libs/angular-route/angular-route.min.js"></script>
+	<script src="libs/angular-cookies/angular-cookies.min.js"></script>
+	<script src="libs/angular-resource/angular-resource.min.js"></script>
+
+	<!-- ANGULAR CUSTOM -->
+	<script src="js/controllers/AccountController.js"></script>
+	<script src="js/controllers/HomeController.js"></script>
+	<script src="js/controllers/NerdController.js"></script>
+	<script src="js/controllers/GeekCtrl.js"></script>
+	<script src="js/controllers/gapiController.js"></script>
+	<script src="js/services/NerdService.js"></script>
+  <script src="js/controllers/FileController.js"></script>
+  <script src="js/services/FileService.js"></script>
+	<script src="js/services/gapiService.js"></script>
+	<script src="js/services/GeekService.js"></script>
+	<script src="js/services/AccountService.js"></script>
+	<script src="js/appRoutes.js"></script>
+	<script src="js/app.js"></script>
+</head>
+
+<body ng-app="sampleApp" ng-controller="HomeController" >
+<div class="container">
+	
+	<!-- HEADER -->
+	<nav class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">Home</a>
+		</div>
+
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<ul class="nav navbar-nav">
+			<li><a href="/nerds">Nerds</a></li>
+			<li><a href="/geeks">Geeks</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<div ng-if="loggedIn">
+				<ul class="nav navbar-nav">
+					<li><a href="/register">Register</a></li>
+					<li><a href="/login">Login</a></li>
+				</ul>
+			</div>
+
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile<span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#">Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Log out</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	</nav>
+
+    <!--Add a button for the user to click to initiate auth sequence -->
+    <button id="authorize-button" style="visibility: hidden">Authorize</button>
+    <script type="text/javascript">
+      // Enter a client ID for a web application from the Google Developer Console.
+      // The provided clientId will only work if the sample is run directly from
+      // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
+      // In your Developer Console project, add a JavaScript origin that corresponds to the domain
+      // where you will be running the script.
+      var clientId = '242925103834-62p0i78fsoote0nkhpn6lfjpau0ljt2v.apps.googleusercontent.com';
+
+      // Enter the API key from the Google Develoepr Console - to handle any unauthenticated
+      // requests in the code.
+      // The provided key works for this sample only when run from
+      // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
+      // To use in your own application, replace this API key with your own.
+      var apiKey = 'AIzaSyACyKO5dH-2eU_QZj5CTPv57CqvstqBXmE';
+
+      // To enter one or more authentication scopes, refer to the documentation for the API.
+      var scopes = "https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/devstorage.full_control";
+
+      // Use a button to handle authentication the first time.
+      function handleClientLoad() {
+        gapi.client.setApiKey(apiKey);
+        window.setTimeout(checkAuth,1);
+      }
+
+      function checkAuth() {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+      }
+
+
+      function handleAuthResult(authResult) {
+        var authorizeButton = document.getElementById('authorize-button');
+        if (authResult && !authResult.error) {
+          authorizeButton.style.visibility = 'hidden';
+          makeApiCall();
+        } else {
+          authorizeButton.style.visibility = '';
+          authorizeButton.onclick = handleAuthClick;
+        }
+      }
+
+      function handleAuthClick(event) {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+        return false;
+      }
+
+      // Load the API and make an API call.  Display the results on the screen.
+      function makeApiCall() {
+        gapi.client.load('plus', 'v1', function() {
+          var request = gapi.client.plus.people.get({
+            'userId': 'me'
+          });
+          request.execute(function(resp) {
+            var heading = document.createElement('h4');
+            var image = document.createElement('img');
+            image.src = resp.image.url;
+            heading.appendChild(image);
+            heading.appendChild(document.createTextNode(resp.displayName));
+
+            document.getElementById('content').appendChild(heading);
+          });
+        });
+        gapi.client.load('storage', 'v1', function() {
+          // var request = gapi.client.storage.buckets.insert(
+          //   {'project': 'effective-balm-635'},
+          //   {'resource': {'name': 'cindylikeschicken'}}
+          // );
+
+//**********************
+// GET ALL BUCKETS, STORE IN ARRAY (bucket_arr[i])
+//**********************
+  var buckets = gapi.client.storage.buckets.list(
+    {'project' : 'effective-balm-635'}
+  );
+  var bucket_arr = [];
+  buckets.execute(function(resp) {
+    var num_buckets = resp.items.length;
+    for (var i = 0; i < num_buckets; i++) {
+      bucket_arr[i] = resp.items[i].id;
+    };
+  });
+
+  var bucketId = 'cindylikeschicken';  //Need to change to the user's bucket (no users on this)
+
+//*********************
+// DELETE OBJECT FROM BUCKET  (uncomment execute func to run it)
+//**********************
+var delete_request = gapi.client.storage.objects.delete({
+    'bucket': bucketId,
+    'object': 'tree.jpeg'
+  });
+// delete_request.execute(function(resp) {
+//   console.log("delete resp: " + JSON.stringify(resp));
+// });
+
+
+//**********************
+// GET ALL OBJECTS IN A BUCKET, DISPLAY 
+//**********************
+
+  var list_obj_request = gapi.client.storage.objects.list(
+    {'bucket' : 'cindylikeschicken'} //PUT ALL OF THIS AND BELOW IN THE BUCKETS.EXECUTE
+  );
+  list_obj_request.execute(function(resp) {
+    // console.log("storage bucket response: \n" + JSON.stringify(resp));
+    var heading = document.createElement('h4');
+
+    var bucket = resp.items[0].bucket;
+    var file_arr = [];
+    var filename = "";
+    for (var i = 0; i < resp.items.length; i++) {
+      filename = resp.items[i].name;
+      var image = document.createElement('img');
+      image.src = 'http://storage.googleapis.com/' + bucket + '/' + filename;
+      heading.appendChild(image);
+      heading.appendChild(document.createTextNode(filename));
+      document.getElementById('content').appendChild(heading);
+    };
+  });
+});
+
+}
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <div id="content"></div>
+
+    <!-- ANGULAR DYNAMIC CONTENT -->
+	<div ng-view></div>
+
+</div>
+</body>
+</html>

@@ -3,7 +3,7 @@ angular.module('NerdController', []).controller('NerdController', function($scop
 
 	$scope.getNerds = function(){
 		Nerd.get().then(function(response){
-			console.log('resopnse.data = ' + response.data);
+			console.log('response.data = ' + response.data);
 			$scope.allnerds = response.data;
 		});
 	}
@@ -64,7 +64,11 @@ angular.module('NerdController', []).controller('NerdController', function($scop
 	};
 
 	$scope.updateNerd = function(){
-
+		console.log('updating nerd');
+		var nerdId = $routeParams._id;
+		Nerd.update({ _id: nerdId }); //Need to add in rest of update
+		$scope.getNerds();		
+		$location.path('nerds');
 	};
 
 });

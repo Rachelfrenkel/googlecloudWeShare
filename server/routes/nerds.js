@@ -4,7 +4,7 @@ var nerds = require('../controllers/NerdController');
 var url = require('url') ;
 var util = require('util');
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
 
 	// server routes ===========================================================
 	// handle things like api calls
@@ -12,20 +12,20 @@ module.exports = function(app) {
 
 	//This line of code appends a "nerd" object to our request object
     app.param('id', nerds.nerd); 
+
+	// app.use(function(req, res, next) {
+	// 	if (req.isAuthenticated()){
+	// 		return next();
+	// 	}
+	// 	return res.send('Session expired');
+	// 	// res.redirect('/');
+	// });
+
 	app.route('/api/nerds')
 		.get(nerds.find)
 		.post(nerds.create);
 	app.route('/api/nerds/:id')
-		.delete(nerds.destroy);
-
-	// route to handle update (app.put)
-
-	// frontend routes =========================================================
-	// route to handle all angular requests
-	app.get('*', function(req, res) {
-		console.log('called here');
-		// console.log('CSRF request token = ' + req.csrfToken());
-		res.sendfile('./public/index.html'); // load our public/index.html file
-	});
+		.delete(nerds.destroy)
+		.put(nerds.update);
 
 };

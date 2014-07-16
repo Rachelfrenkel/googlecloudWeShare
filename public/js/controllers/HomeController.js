@@ -2,4 +2,8 @@ angular.module('HomeController', []).controller('HomeController', function($scop
 
 	$scope.tagline = 'To the moon and back!';	
 
+	// $scope.UserLoggedIn = function(){
+		
+	// }
+	// $scope.loggedIn = true;
 });
