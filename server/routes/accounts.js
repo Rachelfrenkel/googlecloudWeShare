@@ -23,8 +23,8 @@ module.exports = function(app, passport) {
 	app.route('/api/upload')
 		.post(files.upload);
 
-	app.route('/api/delete')
-		.delete(files.delete);
+	app.route('/api/delete/:bucket/:file')
+		.delete(files.destroy);
 
 	app.route('/api/getfiles')
 		.get(files.getfiles);

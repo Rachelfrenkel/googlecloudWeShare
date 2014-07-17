@@ -7,11 +7,11 @@ var restify = require('restify'),
     GCS = require('node-gcs'),
     multiparty = require('multiparty'),
     Mimer = require('mimer');
-var googleapis = require('googleapis'),
-    OAuth2 = googleapis.auth.OAuth2;
+
 var CloudStorage = require('cloud-storage');
 var gcloud = require('gcloud'),
     bucketCloud = new gcloud.storage.Bucket({
+        bucketName: 'cindylikeschicken',
         projectId: 'effective-balm-635',
         email: '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8@developer.gserviceaccount.com',
         pemFilePath: __dirname + "/../../key.pem"
@@ -21,37 +21,33 @@ var gcloud = require('gcloud'),
   var clientId = '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8.apps.googleusercontent.com';
   var email =    '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8@developer.gserviceaccount.com';
 
-  // Enter the API key from the Google Develoepr Console - to handle any unauthenticated
-  // requests in the code.
-  // The provided key works for this sample only when run from
-  // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
-  // To use in your own application, replace this API key with your own.
   var apiKey = 'AIzaSyACyKO5dH-2eU_QZj5CTPv57CqvstqBXmE';
-
-  // To enter one or more authentication scopes, refer to the documentation for the API.
-  // var scopes = "https://www.googleapis.com/auth/devstorage.full_control";
 
   var keyPath = __dirname + "../../key.pem";
 
-var client = '242925103834-62p0i78fsoote0nkhpn6lfjpau0ljt2v.apps.googleusercontent.com';
-var secret = 'MPhASyHID27d1FpF09e2-UnH';
-var redirect = 'http://localhost:8000/oauth2callback';
-// var auth = new googleapis.OAuth2Client(client, secret, redirect);
+// var client = '242925103834-62p0i78fsoote0nkhpn6lfjpau0ljt2v.apps.googleusercontent.com';
+// var secret = 'MPhASyHID27d1FpF09e2-UnH';
+// var redirect = 'http://localhost:8000/oauth2callback';
+// // var auth = new googleapis.OAuth2Client(client, secret, redirect);
 
-var oauth2Client =
-    new OAuth2(client, secret, redirect);
+// var oauth2Client =
+//     new OAuth2(client, secret, redirect);
 
-// generates a url that allows offline access and asks permissions
-// for Google+ scope.
-var scopes = [
-  'https://www.googleapis.com/auth/plus.me',
-  'https://www.googleapis.com/auth/devstorage.full_control'
-];
+// // generates a url that allows offline access and asks permissions
+// // for Google+ scope.
+var scopes ='https://www.googleapis.com/auth/devstorage.full_control';
 
-var url = oauth2Client.generateAuthUrl({
-  access_type: 'offline',
-  scope: scopes.join(" ") // space delimited string of scopes
-});
+// gapi.auth.authorize(
+//     {client_id: clientId, scope: scopes, immediate: false},
+//     function(authResult) {
+//       if (authResult && !authResult.error) {
+//       gapi.client.load('storage', 'v1', function() { ...
+
+
+// var url = oauth2Client.generateAuthUrl({
+//   access_type: 'offline',
+//   scope: scopes.join(" ") // space delimited string of scopes
+// });
 
 var storage = new CloudStorage({
     accessId: '242925103834-s6lkt0e9slm8a1t0fefge7sma2phjmj8@developer.gserviceaccount.com',
@@ -60,63 +56,20 @@ var storage = new CloudStorage({
 
 exports.getfiles = function(req, res){
 
-    var bucket = 'cindylikeschicken';
+      var url_array = [];
 
-    console.log("getting files server side");
-    var url = storage.getUrl("gs://cindylikeschicken/hivince");
-    console.log("url: ", url);
+      bucketCloud.list(function(err, files, nextQuery) {
+            if(err) console.log(err);
 
-    bucketCloud.list(function(err, files, nextQuery) {
-        if(err) console.log(err);
-        console.log("files: ", files);
-    });
-
-    // googleapis.discover('storage', 'v1').execute(function(err, client) {
-    //     if (err) {
-    //         console.log('problem during client discovery', err);
-    //         return;
-    //     }
-    //     client.storage.buckets.list(
-    //         {'project': 'effective-balm-365'},
-    //         {'bucket':'cindylikeschicken'})
-    //         .withApiKey(apiKey)
-    //         .withAuthClient(oauth2Client)
-    //         .execute(function(resp) {
-    //             console.log("bucket resp: ", resp);
-    //         });
-
-    // });
+            if (files) {
+                for (var i = 0; i < files.length; i++) {
+                url_array[i] = storage.getUrl("gs://cindylikeschicken/" + files[i].name); 
+                console.log(url_array[i]);           
+                };
+            }
+            res.jsonp(url_array);
+      });
 }
-
-
-//   console.log("getting files");
-//   //pass in bucket in req
-
-//   gapi.client.load('storage', 'v1', function() {
-//     var list_obj_request = gapi.client.storage.objects.list(
-//       {'bucket' : 'cindylikeschicken'} //PUT ALL OF THIS AND BELOW IN THE BUCKETS.EXECUTE
-//     );
-//     list_obj_request.execute(function(resp) {
-//       // console.log("storage bucket response: \n" + JSON.stringify(resp));
-//       // var heading = document.createElement('h4');
-
-//       var bucket = resp.items[0].bucket;
-
-//       var filename = "";
-//       for (var i = 0; i < resp.items.length; i++) {
-//         allfiles[i] = resp.items[i].name;
-//         console.log("got file: " + allfiles[i]);
-//         // filename = resp.items[i].name;
-//         // var image = document.createElement('img');
-//         // image.src = 'http://storage.googleapis.com/' + bucket + '/' + filename;
-//         // heading.appendChild(image);
-//         // heading.appendChild(document.createTextNode(filename));
-//         // document.getElementById('content').appendChild(heading);
-//       };
-//       res.jsonp(allfiles);
-//     });
-//   });
-// }
 
 exports.upload = function(req, res) {
 
@@ -150,13 +103,15 @@ exports.upload = function(req, res) {
         });
 
     });
-    res.redirect('/nerds');
+    res.redirect('/');
 };
 
-exports.delete = function(req, res) {
-    //var bucket = req.params.bucket
-    storage.remove("gs://cindylikeschicken/hivince", function(err, success) { 
+exports.destroy = function(req, res) {
+    var bucket = req.params.bucket
+    var file = req.params.file;
+
+    storage.remove("gs://" + bucket + "/"+file, function(err, success) { 
         console.log(success);
+        res.send('File is deleted');
     });
-    res.redirect('/nerds');
 };

@@ -62,6 +62,7 @@ require('./config/passport')(passport); // pass passport for configuration
 // routes ==================================================
 require('./server/routes/nerds')(app, passport); // pass our application into our routes
 require('./server/routes/accounts')(app, passport); // pass our application into our routes
+require('./server/routes/files')(app); // pass our application into our routes
 
 // start app ===============================================
 app.listen(port);	

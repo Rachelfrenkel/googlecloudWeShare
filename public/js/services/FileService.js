@@ -11,8 +11,8 @@ angular.module('FileService', []).factory('File', ['$http', '$cookies', '$resour
 			return $http.post('/api/upload/');
 		},
 
-		destroy : function(id) {
-			return $http.delete('/api/delete/' + id);
+		destroy : function(bucket, file) {
+			return $http.delete('/api/delete/' + bucket + '/' + file);
 		},
 	}	
 }]);
