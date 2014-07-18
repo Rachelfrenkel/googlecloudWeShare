@@ -1,0 +1,33 @@
+
+<div ng-controller="FileController" data-ng-init="getFiles()">
+
+<script></script>
+
+
+	<div class="jumbotron text-center">
+		<h1>Home Page</h1>
+
+		<p>{{ tagline }}</p>
+	</div>
+
+	<h1>bucket: {{bucket}}</h1>
+<br>
+	<form method="post" enctype="multipart/form-data" action="/api/upload">
+		<input type="hidden" name="_csrf">		
+	    <input class="btn btn-default"type="file" name="file" data-ng-model="file"><br>
+	    <input class="btn btn-primary btn-sm" type="submit" value="Upload">
+	</form>
+<br><br>
+
+	<div class="file-list" ng-repeat="file in allfiles track by $index">
+		<!-- <button class="btn-xs btn-info" ng-click="editFile(file)">Edit</button> -->
+		<b>File #{{$index+1}}</b>
+		<button class="btn-xs btn-danger" ng-click="deleteFile(file, bucket)">Delete</button><br>
+
+		<a href="#"><img src={{file}}></a>
+
+		{{file}}
+	    <br> --------------------------------------------- <br><br>
+	</div>
+
+</div>

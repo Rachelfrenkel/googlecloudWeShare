@@ -8,7 +8,6 @@ var methodOverride = require('method-override');
 var csrf = require('csurf');
 var mongoose = require('mongoose');
 var passport = require('passport');
-// var LocalStrategy = require('passport-local').Strategy;
 var util = require('util');
 var bcrypt = require('bcrypt-nodejs');
 var flash = require('connect-flash');
@@ -62,7 +61,7 @@ require('./config/passport')(passport); // pass passport for configuration
 // routes ==================================================
 require('./server/routes/nerds')(app, passport); // pass our application into our routes
 require('./server/routes/accounts')(app, passport); // pass our application into our routes
-require('./server/routes/files')(app); // pass our application into our routes
+require('./google-cloud/server/files')(app); // pass our application into our routes
 
 // start app ===============================================
 app.listen(port);	

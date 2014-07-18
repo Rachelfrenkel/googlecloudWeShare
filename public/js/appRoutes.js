@@ -10,7 +10,7 @@ angular.module('appRoutes', [])
 		// })
 
 		.when('/', {
-			templateUrl: 'views/home.html',
+			templateUrl: 'google-cloud_public/home.html',
 			controller: 'FileController'
 		})
 
